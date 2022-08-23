@@ -219,7 +219,8 @@ os_gshadowm_mode: "0000"
 os_grub_file: "{{ os_grub_config_file }}"
 os_grub_owner: "root"
 os_grub_group: "root"
-os_grub_mode: "0644"
+# to comply with CIS 1.5.1 changed mode from 0644 to 0600
+os_grub_mode: "0600"
 
 # Log files in /var/log
 os_logfile_mode: "o-wx"
