@@ -651,18 +651,42 @@
     - not ansible_check_mode
     - check_root_pw.stdout != ""
 
-- name: req-024.4 set single user mode
+#- name: req-024.4 set single user mode
+#  lineinfile:
+#    dest: '{{ item }}'
+#    state: present
+#    regexp: '^ExecStart=*'
+#    line: 'ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
+#  with_items:
+#    - "/usr/lib/systemd/system/rescue.service"
+#    - "/usr/lib/systemd/system/emergency.service"
+#  when:
+#    - config_req_24 | default(true)
+#    - not os_config_root_password
+
+# changed the line to comply with 1.5.3
+- name: req-024.4.1 set single user mode
   lineinfile:
-    dest: '{{ item }}'
+    dest: /usr/lib/systemd/system/rescue.service
     state: present
     regexp: '^ExecStart=*'
-    line: 'ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
-  with_items:
-    - "/usr/lib/systemd/system/rescue.service"
-    - "/usr/lib/systemd/system/emergency.service"
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
   when:
     - config_req_24 | default(true)
     - not os_config_root_password
+
+- name: req-024.4.2 set single user mode
+  lineinfile:
+    dest: /usr/lib/systemd/system/emergency.service
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
+  when:
+    - config_req_24 | default(true)
+    - not os_config_root_password
+
+
+
 
 # | Req-25: The management of the operating system must be done via a dedicated 
 # |         management network.
