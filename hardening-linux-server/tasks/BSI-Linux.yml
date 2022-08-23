@@ -1,0 +1,8 @@
+- name: 5.1.2 Ensure permissions on /etc/crontab are configured
+  ansible.builtin.file:
+    path: /etc/crontab
+    state: touch
+    owner: root
+    group: root
+    mode: 0600
+  when: config_req_07 | default(true)
