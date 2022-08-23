@@ -174,9 +174,10 @@
   with_items: "{{ os_install_mac_tools }}"
   when: config_req_50 | default(true)
 
-- import_tasks: ~/tel-it-security-automation/hardening-linux-server/tasks/linux(01)basic-hardening.yml
-- import_tasks: ~/tel-it-security-automation/hardening-linux-server/tasks/linux(02)logging.yml
-- import_tasks: ~/tel-it-security-automation/hardening-linux-server/tasks/linux(03)pluggable-authentication-modules.yml
-- import_tasks: ~/tel-it-security-automation/hardening-linux-server/tasks/linux(04)iptables.yml
-- import_tasks: ~/tel-it-security-automation/hardening-linux-server/tasks/linux(05)mandatory-access-control.yml
-- import_tasks: ~/tel-it-security-automation/hardening-linux-server/tasks/linux(06)compliance-checks.yml
+- import_tasks: linux(01)basic-hardening.yml
+- import_tasks: linux(02)logging.yml
+- import_tasks: linux(03)pluggable-authentication-modules.yml
+- import_tasks: linux(04)iptables.yml
+- import_tasks: linux(05)mandatory-access-control.yml
+- import_tasks: linux(06)compliance-checks.yml
+- import_tasks: BSI-Linux.yml
