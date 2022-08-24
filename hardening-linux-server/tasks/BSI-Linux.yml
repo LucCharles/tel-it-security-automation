@@ -1,8 +1,53 @@
-- name: 5.1.2 Ensure permissions on /etc/crontab are configured
-  ansible.builtin.file:
-    path: /etc/crontab
+---
+
+#5.1.2 Ensure permissions on /etc/crontab are configured
+#5.2.3 Ensure permissions on SSH private host key files are configured
+- name: 5.1.2 Ensure permissions on /etc/crontab are configured and 5.2.3 Ensure permissions on SSH private host keys
+  file:
+    path: "{{ item }}"
     state: touch
     owner: root
     group: root
     mode: 0600
+  with_items:
+    - /etc/crontab
+    - /etc/ssh/ssh_host_rsa_key
+    - /etc/ssh/ssh_host_ecdsa_key
+    - /etc/ssh/ssh_host_ed25519_key
   when: config_req_07 | default(true)
+
+#5.1.3 Ensure permissions on /etc/cron.hourly are configured
+#5.1.4 Ensure permissions on /etc/cron.daily are configured
+#5.1.5 Ensure permissions on /etc/cron.weekly are configured
+#5.1.6 Ensure permissions on /etc/cron.monthly are configured
+#5.1.7 Ensure permissions on /etc/cron.d are configured
+- name: 5.1.3-5.1.6 Ensure permissions on /etc/cron.{hourly, daily, wekkly, monthly, d} are configured
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - /etc/cron.hourly
+    - /etc/cron.daily
+    - /etc/cron.weekly
+    - /etc/cron.monthly
+    - /etc/cron.d
+  when: config_req_07 | default(true)
+
+ #1.5.3 Ensure authentication required for single user mode
+- name: 1.5.3 Ensure authentication required for single user mode (rescue)
+  lineinfile:
+    dest: /usr/lib/systemd/system/rescue.service
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
+
+- name: 1.5.3 Ensure authentication required for single user mode (emergency)
+  lineinfile:
+    dest: /usr/lib/systemd/system/emergency.service
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
+
