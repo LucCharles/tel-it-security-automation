@@ -36,7 +36,7 @@
     - /etc/cron.d
   when: config_req_07 | default(true)
 
- #1.5.3 Ensure authentication required for single user mode
+#1.5.3 Ensure authentication required for single user mode
 - name: 1.5.3 Ensure authentication required for single user mode (rescue)
   lineinfile:
     dest: /usr/lib/systemd/system/rescue.service
