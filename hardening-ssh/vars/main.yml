@@ -78,7 +78,7 @@ max_startups: "10:30:100"
 
 # Req-10: SSH root login must be disabled.
 config_permit_root: "{{ config_req_10 | default(true) }}"
-allow_root_login: false
+allow_root_login: true
 
 # Req-11: SSH strict mode must be enabled.
 config_strict_mode: "{{ config_req_11 | default(true) }}"
@@ -152,7 +152,7 @@ sftp_chroot_dir: /home/%u
 sftp_tcp_forwarding: false
 sftp_agent_forwarding: false
 sftp_password_auth: false
-sftp_root_login: false
+sftp_root_login: true
 sftp_x11_forwardning: false
 
 # Optional: Use AuthorizedKeysCommand

@@ -127,8 +127,10 @@ config_req_17: true
 # Set timeout interval for SSH connection 
 #    client_alive_interval (seconds) x client_alive_count; 
 #    Example: 60 (sec) x 10 (alives) = 10 min timeout
-client_alive_interval: 60
-client_alive_count: 10
+#client_alive_interval: 60
+#client_alive_count: 10
+client_alive_interval: 300
+client_alive_count: 2
 
 # Req-18: SSH tunnel devices must be disabled.
 config_req_18: true

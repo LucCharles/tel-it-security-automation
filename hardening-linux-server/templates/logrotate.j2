@@ -31,18 +31,20 @@ dateext
 include /etc/logrotate.d
 
 # no packages own wtmp and btmp -- we'll rotate them here
+# 4.2.3 changed mode to comply with CIS requirement 0660 -> 0640
 /var/log/wtmp {
     missingok
     {{log_rotate_time}}
-    create 0660 root utmp
+    create 0640 root utmp
     maxsize {{log_rotate_maxsize}}
     rotate {{log_rotate_count}}
 }
 
+# 4.2.3 changed mode to comply with CIS requirement 0660 -> 0640
 /var/log/btmp {
     missingok
     {{log_rotate_time}}
-    create 0660 root utmp
+    create 0640 root utmp
     maxsize {{log_rotate_maxsize}}
     rotate {{log_rotate_count}}
 }

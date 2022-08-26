@@ -51,3 +51,14 @@
     regexp: '^ExecStart=*'
     line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
 
+
+#4.2.3 Ensure permissions on all logfiles are configured
+#find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
+- name: 4.2.3 Ensure permissions on all logfiles are configured (check)
+  ansible.builtin.script: /usr/bin/find /var/log -type f -perm /037 -ls -o -type d -perm /026 -ls
+  register: result_4_2_3
+  changed_when: false
+
+- name: 4.2.3 Ensure permissions on all logfiles are configured (remediate)
+  ansible.builtin.script: /usr/bin/find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
+  when: result_4_2_3.stdout != ""
