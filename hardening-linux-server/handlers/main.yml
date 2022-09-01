@@ -72,4 +72,5 @@
     enabled: yes
   when: not ansible_check_mode
 
-
+- name: remove usb-storage
+  ansible.builtin.script: /usr/sbin/rmmod usb-storage
