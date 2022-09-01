@@ -107,7 +107,7 @@
     path: "/etc/authselect/custom/devsecops-profile/{{ item }}"
     regexp: '^auth\s+required\s+pam_faillock\.so\s+authfail\s+\{include\sif\s\"with-faillock\"\}'
     state: present
-    line: auth        required                                     pam_faillock.so authfail silent deny={{ failed_login_attemps }} unlock_time={{ unlock_time }}        {include if "with-faillock"}
+    line: auth        required                                     pam_faillock.so authfail deny={{ failed_login_attemps }} unlock_time={{ unlock_time }}        {include if "with-faillock"}
   with_items:
     - password-auth
     - system-auth
