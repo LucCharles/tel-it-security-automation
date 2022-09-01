@@ -93,9 +93,11 @@
 
 - name: req-42-45.7 
   lineinfile:
+    path: "/etc/authselect/custom/devsecops-profile/{{ item }}"
     regexp: '^auth\s+required\s+pam_faillock\.so\spreauth\ssilent\s+\{include\sif\s\"with-faillock\"\}'
     state: present
     line: auth        required                                     pam_faillock.so preauth silent deny={{ failed_login_attemps }} unlock_time={{ unlock_time }}                        {include if "with-faillock"}
+  with_items: "{{ os_pam_config_files }}"
 
 # Req-42: If PAM is used, it needs to be reconfigured to use strong salted
 #         password hash functions while doing many calculation rounds to protect
