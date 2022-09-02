@@ -49,6 +49,7 @@
     line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
   when:
     - ansible_check_mode == false
+  tags: test
 
 - name: 1.5.3 Ensure authentication required for single user mode (emergency)
   lineinfile:
@@ -58,6 +59,7 @@
     line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
   when:
     - ansible_check_mode == false
+  tags: test
 
 
 #4.2.3 Ensure permissions on all logfiles are configured
