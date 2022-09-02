@@ -113,6 +113,16 @@
     - system-auth
   tags: test
 
+- name: CIS 5.4.3 (Redhat) custom authselect
+  lineinfile:
+    path: "/etc/authselect/custom/devsecops-profile/{{ item }}"
+    regexp: '^password\s+requisite\s+pam_pwquality\.so\s+local_users_only'
+    state: present
+    line: password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3 remember=5
+  with_items:
+    - system-auth
+  tags: test
+
 # Req-42: If PAM is used, it needs to be reconfigured to use strong salted
 #         password hash functions while doing many calculation rounds to protect
 #         passwords.
