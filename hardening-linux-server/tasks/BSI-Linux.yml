@@ -107,3 +107,16 @@
   tags:
     - cis.1.1.23
 
+- name: cis 1.5.2 Ensure bootloader password is set (check)
+  lineinfile:
+    path: /boot/grub2/user.cfg
+    state: present
+    create: yes
+    mode: '0600'
+    owner: root 
+    group: root
+    regexp: '^GRUB2_PASSWORD=' 
+    line: GRUB2_PASSWORD=grub.pbkdf2.sha512.10000.3C35F8C44F9A7543B64C7ED7CF4C77893465185E0D645B00F9904EA5973BCB46238A77737E1B6D752AECB1E34A41274DB12129CE8A7104DD2F81ABCAED862C2B.F737492F278B83B6C9288FA831F1C752DE20FDE998DDE2F3F99645AA8FED6A342F96E8552ABF63DAFF8135909D60DBEA53D7D6BD3EF12F6B3946DF502E8C713E
+  when:
+    - ansible_distribution == "RedHat"
+  tags: test
