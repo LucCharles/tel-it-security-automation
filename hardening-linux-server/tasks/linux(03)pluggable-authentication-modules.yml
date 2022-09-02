@@ -113,12 +113,23 @@
     - system-auth
   tags: test
 
-- name: CIS 5.4.3 (Redhat) custom authselect
+- name: CIS 5.4.3 part 1 (Redhat) custom authselect
   lineinfile:
     path: "/etc/authselect/custom/devsecops-profile/{{ item }}"
     regexp: '^password\s+requisite\s+pam_pwquality\.so\s+local_users_only'
     state: present
     line: password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3 remember=5
+  with_items:
+    - system-auth
+  tags: test
+
+
+- name: CIS 5.4.3 part 2 (Redhat) custom authselect
+  lineinfile:
+    path: "/etc/authselect/custom/devsecops-profile/{{ item }}"
+    regexp: '^password\s+sufficient\s+pam_unix\.so'
+    state: present
+    line: password    sufficient                                   pam_unix.so sha512 shadow {if not "without-nullok":nullok} use_authtok rounds=640000 remember=5
   with_items:
     - system-auth
   tags: test
