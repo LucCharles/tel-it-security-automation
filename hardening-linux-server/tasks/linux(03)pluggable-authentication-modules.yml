@@ -121,6 +121,7 @@
     line: password    requisite                                    pam_pwquality.so try_first_pass local_users_only retry=3 remember=5
   with_items:
     - system-auth
+    - password-auth
   tags: test
 
 
