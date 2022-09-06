@@ -176,7 +176,7 @@
   tags: test2
 
 - name: cis 1.8.1.6-3 Ensure bootloader password is set (SLES)
-  ansible.builtin.script: sudo /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+  ansible.builtin.shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
   when:
     - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
   tags: test2
