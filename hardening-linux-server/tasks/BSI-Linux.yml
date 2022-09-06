@@ -146,4 +146,4 @@
   when:
     - ansible_distribution == "RedHat"
     - ansible_distribution == "SLES"
-  tags: test
+  tags: test, test2
