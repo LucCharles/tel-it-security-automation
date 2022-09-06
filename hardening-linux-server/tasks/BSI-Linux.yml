@@ -147,7 +147,7 @@
     - ansible_distribution == "RedHat"
   tags: test
 
-- name: cis 1.8.1.6-1 Ensure bootloader password is set (SLES)
+- name: cis 1.5.1-1 Ensure bootloader password is set (SLES)
   lineinfile:
     path: /etc/grub.d/40_custom
     state: present
@@ -161,7 +161,7 @@
     - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
   tags: test2
 
-- name: cis 1.8.1.6-2 Ensure bootloader password is set (SLES)
+- name: cis 1.5.1-2 Ensure bootloader password is set (SLES)
   lineinfile:
     path: /etc/grub.d/40_custom
     state: present
@@ -175,7 +175,7 @@
     - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
   tags: test2
 
-- name: cis 1.8.1.6-3 Ensure bootloader password is set (SLES)
+- name: cis 1.5.1-3 Ensure bootloader password is set (SLES)
   ansible.builtin.shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
   when:
     - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
