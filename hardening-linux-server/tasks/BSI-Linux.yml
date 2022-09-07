@@ -202,7 +202,7 @@
     state: present
     insertafter: EOF 
     regexp: '^password\s+required\spam_pwhistory.so'
-    line: password   required pam_pwhistory.so remember=5
+    line: password   required pam_pwhistory.so  remember=5
   when:
     - ansible_check_mode == false
     - (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
