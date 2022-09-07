@@ -98,12 +98,14 @@
   when:
     - ansible_distribution == "RedHat"
 
-- name: cis 4.2.3 Ensure permissions on all logfiles are configured (remediate) (redhat)
+- name: cis 4.2.3 Ensure permissions on all logfiles are configured (remediate) (Redhat)
   ansible.builtin.script: /usr/bin/find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
   when: 
+    - ansible_distribution == "RedHat"
     - result_cis_4_2_3.stdout != ""
     - ansible_check_mode == false
-    - ansible_distribution == "RedHat"
+  tags: test3
+
 
 #1.11 Ensure system-wide crypto policy is FUTURE or FIPS
 - name: 1.11 Ensure system-wide crypto policy is FUTURE or FIPS (check) (Redhat)
