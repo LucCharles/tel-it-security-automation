@@ -136,9 +136,9 @@
     regexp: 'install usb-storage /bin/true'
     line: install usb-storage /bin/true
   when:
+    - ansible_distribution == "RedHat"
     - ansible_check_mode == false
     - result_cis_1_1_23.stdout != "install usb-storage /bin/true"
-    - ansible_distribution == "RedHat"
   notify: remove usb-storage
   tags:
     - cis.1.1.23
