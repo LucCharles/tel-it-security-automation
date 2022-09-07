@@ -2,10 +2,9 @@
 
 #5.1.2 Ensure permissions on /etc/crontab are configured
 #5.2.3 Ensure permissions on SSH private host key files are configured
-- name: cis 5.1.2 Ensure permissions on /etc/crontab are configured and 5.2.3 Ensure permissions on SSH private host keys
+- name: cis 5.1.2/5.2.3 Ensure permissions on /etc/crontab are configured and 5.2.3 Ensure permissions on SSH private host keys
   file:
     path: "{{ item }}"
-    state: touch
     owner: root
     group: root
     mode: 0600
