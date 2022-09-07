@@ -101,6 +101,8 @@
   with_items:
     - password-auth
     - system-auth
+  when:
+    - ansible_distribution == "RedHat"
   tags: test
 
 - name: req-044.5 (Redhat) custom authselect
@@ -112,6 +114,8 @@
   with_items:
     - password-auth
     - system-auth
+  when:
+    - ansible_distribution == "RedHat"  
   tags: test
 
 - name: CIS 5.4.3 part 1 (Redhat) custom authselect
@@ -123,6 +127,8 @@
   with_items:
     - system-auth
     - password-auth
+  when:
+    - ansible_distribution == "RedHat"
   tags: test
 
 
@@ -134,6 +140,8 @@
     line: password    sufficient                                   pam_unix.so sha512 shadow {if not "without-nullok":nullok} use_authtok rounds=640000 remember=5
   with_items:
     - system-auth
+  when:
+    - ansible_distribution == "RedHat"
   tags: test
 
 # Req-42: If PAM is used, it needs to be reconfigured to use strong salted
