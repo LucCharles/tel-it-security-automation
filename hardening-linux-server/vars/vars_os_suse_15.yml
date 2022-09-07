@@ -88,6 +88,8 @@ os_specific_system_events:
 os_specific_access_events:
   # Logon and Logoff
   - "-w /var/log/faillog -p wa -k logins"
+  # CIS 4.1.7
+  - "-w /var/log/tallylog -p wa -k logins"
   # AppArmor events
   - "-w /etc/apparmor/ -p wa -k MAC-policy"
   - "-w /etc/apparmor.d/ -p wa -k MAC-policy"
