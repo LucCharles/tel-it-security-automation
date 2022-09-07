@@ -193,3 +193,17 @@
     - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
     - action_cis_1_5_1__1.changed or action_cis_1_5_1__2.changed
   tags: test2
+
+
+#1.5.3 Ensure authentication required for single user mode
+- name: cis 5.3.3 Ensure password reuse is limited (Suse)
+  lineinfile:
+    dest: /etc/pam.d/common-password
+    state: present
+    insertafter: EOF 
+    regexp: '^password\s+required\spam_pwhistory.so'
+    line: password   required pam_pwhistory.so remember=5
+  when:
+    - ansible_check_mode == false
+    - (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
+  tags: test5
