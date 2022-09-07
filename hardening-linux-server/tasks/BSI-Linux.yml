@@ -74,7 +74,7 @@
     line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
   when:
     - ansible_check_mode == false
-    - ansible_distribution == "RedHat"
+    - (ansible_distribution == "RedHat") or (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
   tags: test
 
 - name: 1.5.3 Ensure authentication required for single user mode (emergency) (Redhat)
@@ -85,7 +85,7 @@
     line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
   when:
     - ansible_check_mode == false
-    - ansible_distribution == "RedHat"
+    - (ansible_distribution == "RedHat") or (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
   tags: test
 
 
