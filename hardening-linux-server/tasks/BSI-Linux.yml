@@ -66,7 +66,7 @@
   tags: test2
 
 #1.5.3 Ensure authentication required for single user mode
-- name: cis 1.5.3 Ensure authentication required for single user mode (rescue)
+- name: cis 1.5.3 Ensure authentication required for single user mode (rescue) (Redat)
   lineinfile:
     dest: /usr/lib/systemd/system/rescue.service
     state: present
@@ -74,9 +74,10 @@
     line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
   when:
     - ansible_check_mode == false
+    - ansible_distribution == "RedHat"
   tags: test
 
-- name: 1.5.3 Ensure authentication required for single user mode (emergency)
+- name: 1.5.3 Ensure authentication required for single user mode (emergency) (Redhat)
   lineinfile:
     dest: /usr/lib/systemd/system/emergency.service
     state: present
@@ -84,41 +85,48 @@
     line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
   when:
     - ansible_check_mode == false
+    - ansible_distribution == "RedHat"
   tags: test
 
 
 #4.2.3 Ensure permissions on all logfiles are configured
 #find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
-- name: 4.2.3 Ensure permissions on all logfiles are configured (check)
+- name: 4.2.3 Ensure permissions on all logfiles are configured (check) (Redhat)
   ansible.builtin.script: /usr/bin/find /var/log -type f -perm /037 -ls -o -type d -perm /026 -ls
   register: result_cis_4_2_3
   changed_when: false
+  when:
+    - ansible_distribution == "RedHat"
 
-- name: cis 4.2.3 Ensure permissions on all logfiles are configured (remediate)
+- name: cis 4.2.3 Ensure permissions on all logfiles are configured (remediate) (redhat)
   ansible.builtin.script: /usr/bin/find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
   when: 
     - result_cis_4_2_3.stdout != ""
     - ansible_check_mode == false
+    - ansible_distribution == "RedHat"
 
 #1.11 Ensure system-wide crypto policy is FUTURE or FIPS
-- name: 1.11 Ensure system-wide crypto policy is FUTURE or FIPS (check)
+- name: 1.11 Ensure system-wide crypto policy is FUTURE or FIPS (check) (Redhat)
   ansible.builtin.replace:
     path: /etc/crypto-policies/config
     regexp: '^DEFAULT'
     replace: 'FUTURE'
   when:
     - ansible_check_mode == false
+    - ansible_distribution == "RedHat"
   tags: 
     - cis.1.11
 
 #1.1.23 Disable USB Storage
-- name: 1.1.23 Disable USB Storage (check)
+- name: 1.1.23 Disable USB Storage (check) (Redhat)
   ansible.builtin.script: /usr/sbin/modprobe -n -v usb-storage
   register: result_cis_1_1_23
+  when:
+    - ansible_distribution == "RedHat"
   tags:
     - cis.1.1.23
 
-- name: 1.1.23 Disable USB Storage (configure)
+- name: 1.1.23 Disable USB Storage (configure) (Redat)
   lineinfile:
     path: /etc/modprobe.d/usb-storage.conf
     state: present
@@ -128,6 +136,7 @@
   when:
     - ansible_check_mode == false
     - result_cis_1_1_23.stdout != "install usb-storage /bin/true"
+    - ansible_distribution == "RedHat"
   notify: remove usb-storage
   tags:
     - cis.1.1.23
