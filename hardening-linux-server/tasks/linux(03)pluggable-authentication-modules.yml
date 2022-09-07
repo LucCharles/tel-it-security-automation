@@ -80,8 +80,8 @@
     path: /etc/authselect/custom/devsecops-profile
     state: absent
   when:
-    - dir_devsecops_profile.stat.exists and not dir_devsecops_profile.stat.isdir
     - ansible_distribution == "RedHat"
+    - dir_devsecops_profile is defined and dir_devsecops_profile.stat.exists and not dir_devsecops_profile.stat.isdir 
   tags: test
   
 - name: req-42-45.6 create custom configuration 'devsecops-profile'
@@ -90,6 +90,7 @@
     - not dir_devsecops_profile.stat.exists
     - ansible_distribution == "RedHat"
   tags: test
+
 
 - name: req-044.4 (Redhat) custom authselect
   lineinfile:
