@@ -43,9 +43,9 @@
   when: 
     - config_pam | default(true)
     - not ansible_check_mode
+    - ansible_distribution != "RedHat"
     - item.1.stat.exists 
     - item.1.stat.islnk
-    - ansible_distribution != "RedHat"
   with_together:
     - "{{ os_pam_config_files }}"
     - "{{ pam_config_files.results }}"
@@ -59,9 +59,9 @@
   when: 
     - config_pam | default(true) 
     - not ansible_check_mode
+    - ansible_distribution != "RedHat"
     - item.1.stat.exists
     - item.1.stat.islnk
-    - ansible_distribution != "RedHat"
   with_together: 
     - "{{ os_pam_config_files }}"
     - "{{ pam_config_files.results }}"
