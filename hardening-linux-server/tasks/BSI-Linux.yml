@@ -115,7 +115,7 @@
     replace: 'FUTURE'
   when:
     - ansible_check_mode == false
-    - ansible_distribution == "RedHat"
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
   tags: 
     - cis.1.11
 
