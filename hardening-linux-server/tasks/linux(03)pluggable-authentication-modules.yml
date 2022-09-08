@@ -72,7 +72,7 @@
     path: /etc/authselect/custom/devsecops-profile
   register: dir_devsecops_profile
   when:
-    - ansible_distribution == "RedHat"
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
   tags: test
 
 - name: req-42-45.5 delete 'devsecops-profile' if it exists and is not a directory
@@ -80,7 +80,7 @@
     path: /etc/authselect/custom/devsecops-profile
     state: absent
   when:
-    - ansible_distribution == "RedHat"
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
     - dir_devsecops_profile is defined and dir_devsecops_profile.stat is defined and dir_devsecops_profile.stat.exists and not dir_devsecops_profile.stat.isdir 
   tags: test
   
@@ -88,7 +88,7 @@
   ansible.builtin.script: /usr/bin/authselect create-profile devsecops-profile -b sssd --symlink-meta --symlink-pam
   when:
     - dir_devsecops_profile is defined and dir_devsecops_profile.stat is defined and not dir_devsecops_profile.stat.exists
-    - ansible_distribution == "RedHat"
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
   tags: test
 
 
@@ -102,7 +102,7 @@
     - password-auth
     - system-auth
   when:
-    - ansible_distribution == "RedHat"
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
   tags: test
 
 - name: req-044.5 (Redhat) custom authselect
@@ -128,7 +128,7 @@
     - system-auth
     - password-auth
   when:
-    - ansible_distribution == "RedHat"
+    - ansible_distribution == "RedHat" and and ansible_distribution_major_version == "8"
   tags: test
 
 
@@ -141,7 +141,7 @@
   with_items:
     - system-auth
   when:
-    - ansible_distribution == "RedHat"
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
   tags: test
 
 # Req-42: If PAM is used, it needs to be reconfigured to use strong salted
