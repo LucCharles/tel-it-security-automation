@@ -176,7 +176,7 @@ os_passwd_mode: "0644"
 os_passwdm_file: "/etc/passwd-"
 os_passwdm_owner: "root"
 os_passwdm_group: "root"
-os_passwdm_mode: "0640"
+os_passwdm_mode: "0600"
 
 # File: /etc/shadow
 os_shadow_file: "/etc/shadow"
