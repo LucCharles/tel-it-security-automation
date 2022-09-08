@@ -207,3 +207,16 @@
     - ansible_check_mode == false
     - (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
   tags: test5
+
+- name: cis 1.8.1.6 Ensure permissions on /etc/issue.net are configured (SLES 15)
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - /etc/issue.net
+  when: 
+    - ansible_check_mode == false
+    - ansible_distribution == "openSUSE Leap"
+  tags: test6
