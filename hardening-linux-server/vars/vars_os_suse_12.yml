@@ -81,7 +81,7 @@ os_timesync_chronyd_user: "chrony"
 # Req-31: Auditd service must be used to log security relevant events.
 os_audit_software: "audit"
 os_audit_deamon: "auditd"
-os_audit_rules_file: "/etc/audit/rules.d/audit.rules"
+os_audit_rules_file: "/etc/audit/audit.rules"
 
 # Req-32:	System events must be logged.
 os_specific_system_events:
