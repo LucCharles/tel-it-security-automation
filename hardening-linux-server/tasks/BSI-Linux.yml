@@ -13,6 +13,7 @@
     - /etc/ssh/ssh_host_rsa_key
     - /etc/ssh/ssh_host_ecdsa_key
     - /etc/ssh/ssh_host_ed25519_key
+  ignore_errors: yes
   when: 
     - config_req_07 | default(true)
     - ansible_check_mode == false
