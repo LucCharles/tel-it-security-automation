@@ -87,6 +87,7 @@
   when: 
     - config_req_30 | default(true)
     - set_timesync_servers | length > 0
+    - ansible_distribution != "openSUSE"
 
 - name: req-030.2 change chronyd file for Chrony
   lineinfile:
@@ -97,6 +98,7 @@
   when: 
     - config_req_30  | default(true)
     - os_timesync_chronyd_user is defined
+    - ansible_distribution != "openSUSE"
 
 - name: req-030.3 set time zone
   command: timedatectl set-timezone {{ set_timezone }}
