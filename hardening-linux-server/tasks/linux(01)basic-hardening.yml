@@ -101,7 +101,9 @@
   when: config_req_04 | default(true)
 
 - name: req-004.2 find root partion
-  shell: df --output=source / | sed 's#[0-9]##g' | grep /dev
+# old: df --output=source / | sed 's#[0-9]##g' | grep /dev
+# new: df / | awk '{print $1}' | grep /dev
+  shell: df / | awk '{print $1}' | grep /dev
   register: root_partition
   changed_when: false
   when: config_req_04 | default(true)
