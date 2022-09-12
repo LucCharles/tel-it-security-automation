@@ -84,6 +84,7 @@
   when: 
     - config_req_56 | default(true)
     - os_mac_solution == "apparmor"
+  tags: test7
 
 - name: req-056.2 enforce apparmor state
   shell: "aa-enforce /etc/apparmor.d/{item}*"
