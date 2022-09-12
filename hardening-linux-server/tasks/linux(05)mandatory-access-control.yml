@@ -83,6 +83,7 @@
     enabled: yes
   when: 
     - config_req_56 | default(true)
+    - ansible_distribution != "openSUSE"
   #  - os_mac_solution == "apparmor"
   tags: test7
 
@@ -92,7 +93,8 @@
   changed_when: false
   when: 
     - config_req_56 | default(true)
-    - os_mac_solution == "apparmor"
+  #  - os_mac_solution == "apparmor"
+    - ansible_distribution != "openSUSE"
 
 
 
