@@ -84,6 +84,8 @@
   when: 
     - config_req_56 | default(true)
     - ansible_distribution != "openSUSE"
+    - not (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7")
+
   #  - os_mac_solution == "apparmor"
   tags: test7
 
@@ -95,6 +97,8 @@
     - config_req_56 | default(true)
   #  - os_mac_solution == "apparmor"
     - ansible_distribution != "openSUSE"
+    - not (ansible_distribution == "RedHat" and ansible_distribution_major_version == "7")
+    
 
 
 
