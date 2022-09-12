@@ -122,7 +122,7 @@
 
 #1.1.23 Disable USB Storage
 - name: 1.1.23 Disable USB Storage (check) (Redhat)
-  ansible.builtin.script: /usr/sbin/modprobe -n -v usb-storage
+  ansible.builtin.shell: /usr/sbin/modprobe -n -v usb-storage
   register: result_cis_1_1_23
   when:
     - ansible_distribution == "RedHat"
