@@ -81,7 +81,7 @@
 
 - name: read variables for openSuse
   include_vars: "vars_os_suse_12.yml"
-  when: ansible_distribution == "openSUSE" and ansible_distribution_version == "12.3"
+  when: ansible_distribution == "openSUSE" and (ansible_distribution_version == "12.3" or ansible_distribution_version =="12.3 (Dartmouth)")
 
 - name: load default or user settings for requirements
   include_vars: '{{ item }}'
