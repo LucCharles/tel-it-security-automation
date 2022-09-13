@@ -565,8 +565,8 @@
   when: config_req_19 | default(true)
 
 - name: req-019.3 check and delete default users from the system
-  user:
-    name: "{{ item }}"
+  ansible.builtin.user:
+    name: '{{ item }}'
     state: absent
   with_items: "{{ users_to_delete }}"
   when: config_req_19 | default(true)
@@ -588,7 +588,7 @@
   when: config_req_20 | default(true)
 
 - name: req-020.3 change system users to nologin
-  user:
+  ansible.builtin.user:
     name: '{{ item }}'
     shell: '{{ os_nologin_path }}'
     password: '*'
@@ -608,9 +608,9 @@
   when: config_req_21 | default(true)
 
 - name: req-021.2 lock all accounts without password
-  user:
+  ansible.builtin.user:
     name: "{{ item }}"
-    password_lock: yes
+    password_lock: 'yes'
   with_items: "{{ user_without_pw.stdout_lines }}"
   when: 
     - config_req_21 | default(true)
