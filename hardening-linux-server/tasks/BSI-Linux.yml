@@ -223,3 +223,26 @@
     - ansible_check_mode == false
     - ansible_distribution == "openSUSE Leap"
   tags: test6
+
+  #5.4.4 (rhel7) Ensure authentication required for single user mode
+- name: cis 5.4.4-1 Ensure password reuse is limited (RedHat 7)
+  lineinfile:
+    dest: /etc/pam.d/password-auth
+    state: present
+    regexp: '^password\s+sufficient\s+pam_unix.so'
+    line: password   sufficient pam_unix.so sha512 shadow nullok try_first_pass use_authtok rounds=640000 remember=5 
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+  tags: cis_5_4_4
+
+- name: cis 5.4.4-2 Ensure password reuse is limited (RedHat 7)
+  lineinfile:
+    dest: /etc/pam.d/system-auth
+    state: present
+    regexp: '^password\s+sufficient\s+pam_unix.so'
+    line: password   sufficient pam_unix.so sha512 shadow nullok try_first_pass use_authtok rounds=640000 remember=5 
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+  tags: cis_5_4_4
