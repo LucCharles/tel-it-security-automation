@@ -1,5 +1,7 @@
 ---
 
+#Added comments for testing integration github with visual studio code
+
 #5.1.2 Ensure permissions on /etc/crontab are configured
 #5.2.3 Ensure permissions on SSH private host key files are configured
 - name: cis 5.1.2/5.2.3 Ensure permissions on /etc/crontab are configured and 5.2.3 Ensure permissions on SSH private host keys
