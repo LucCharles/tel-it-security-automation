@@ -46,7 +46,7 @@
 - name: cis 1.4.2 Ensure permissions on bootloader config are configured (redhat 7)
   file:
     path: "{{ item }}"
-    state: directory
+    state: present
     owner: root
     group: root
     mode: 0600
