@@ -178,7 +178,6 @@
   lineinfile:
     dest: /etc/rsyslog.conf/listen.conf
     state: present
-    after: EOF
     regexp: '^$FileCreateMode'
     line: $FileCreateMode 0640
   when:
