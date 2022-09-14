@@ -1,10 +1,179 @@
 ---
 
-#Added comments for testing integration github with visual studio code
 
-#5.1.2 Ensure permissions on /etc/crontab are configured
-#5.2.3 Ensure permissions on SSH private host key files are configured
-- name: cis 5.1.2/5.2.3 Ensure permissions on /etc/crontab are configured and 5.2.3 Ensure permissions on SSH private host keys
+#1.5.3 Ensure authentication required for single user mode
+- name: cis 1.5.3-01 Ensure authentication required for single user mode (rescue) (Redhat 8)
+  lineinfile:
+    dest: /usr/lib/systemd/system/rescue.service
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+  tags:
+    - cis_1_5_3
+
+- name: cis 1.5.3-20 Ensure authentication required for single user mode (emergency) (Redhat 8)
+  lineinfile:
+    dest: /usr/lib/systemd/system/emergency.service
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+  tags:
+    - cis_1_5_3
+
+- name: cis 1.8.1.6 Ensure permissions on /etc/issue.net are configured (OpenSUSE 15)
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - /etc/issue.net
+  when: 
+    - ansible_check_mode == false
+    - ansible_distribution == "openSUSE Leap"
+  tags:
+    - cis_1_8_1_6
+
+
+#1.11 Ensure system-wide crypto policy is FUTURE or FIPS
+- name: cis 1.11 / 1.15 Ensure system-wide crypto policy is FUTURE or FIPS (check) (Redhat)
+  ansible.builtin.replace:
+    path: /etc/crypto-policies/config
+    regexp: '^DEFAULT'
+    replace: 'FUTURE'
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+  tags: 
+    - cis_1_11 
+    - cis_1_15
+
+- name: cis 1.1.23-01 / 1.1.24-01 Disable USB Storage (check) (Redhat)
+  ansible.builtin.shell: /usr/sbin/modprobe -n -v usb-storage
+  register: result_cis_1_1_23
+  when:
+    - ansible_distribution == "RedHat"
+  tags:
+    - cis_1_1_23
+    - cis_1_1_24
+
+- name: cis 1.1.23-02 Disable USB Storage (configure) (Redhat 8)
+  lineinfile:
+    path: /etc/modprobe.d/usb-storage.conf
+    state: present
+    create: yes
+    regexp: 'install usb-storage /bin/true'
+    line: install usb-storage /bin/true
+  when:
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
+    - ansible_check_mode == false
+    - result_cis_1_1_23.stdout != "install usb-storage /bin/true"
+  notify: remove usb-storage
+  tags:
+    - cis_1_1_23
+
+- name: cis 1.1.24-02 Disable USB Storage (configure) (Redhat 7)
+  lineinfile:
+    path: /etc/modprobe.d/usb-storage.conf
+    state: present
+    create: yes
+    regexp: 'install /bin/true'
+    line: install usb-storage /bin/true
+  when:
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+    - ansible_check_mode == false
+    - result_cis_1_1_23.stdout != "install /bin/true"
+  notify: remove usb-storage
+  tags:
+    - cis_1_1_24
+
+#cis 1.5.1 / 1.5.2 / 1.4.1 Ensure bootloader password is set
+
+- name: cis 1.5.2 / 1.4.1 Ensure bootloader password is set (Redhat)
+  lineinfile:
+    path: /boot/grub2/user.cfg
+    state: present
+    create: yes
+    mode: '0600'
+    owner: root 
+    group: root
+    regexp: '^GRUB2_PASSWORD=' 
+    line: GRUB2_PASSWORD=grub.pbkdf2.sha512.10000.3C35F8C44F9A7543B64C7ED7CF4C77893465185E0D645B00F9904EA5973BCB46238A77737E1B6D752AECB1E34A41274DB12129CE8A7104DD2F81ABCAED862C2B.F737492F278B83B6C9288FA831F1C752DE20FDE998DDE2F3F99645AA8FED6A342F96E8552ABF63DAFF8135909D60DBEA53D7D6BD3EF12F6B3946DF502E8C713E
+  when:
+    - ansible_distribution == "RedHat"
+  tags:
+    - cis_1_5_2 
+    - cis_1_4_1
+
+- name: cis 1.5.1-01 Ensure bootloader password is set (Suse)
+  lineinfile:
+    path: /etc/grub.d/40_custom
+    state: absent
+    mode: '0755'
+    owner: root 
+    group: root
+    insertafter: EOF
+    regexp: '^set superusers="root"' 
+    line: set superusers="root"
+  register: var_cis_1_5_1__1
+  when:
+    - ansible_os_family = "Suse"
+  tags:
+    - cis_1_5_1 
+
+- name: cis 1.5.1-02 Ensure bootloader password is set (Suse)
+  lineinfile:
+    path: /etc/grub.d/40_custom
+    state: absent
+    mode: '0755'
+    owner: root 
+    group: root
+    insertafter: EOF
+    regexp: '^password_pbkdf2 root' 
+    line: password_pbkdf2 root grub.pbkdf2.sha512.10000.7DE0DBB0D911174EBF0CE662FB21E0B38AE7A6DEFEF8FA536686CDE9199BA63E39DDC49D014FC85CF4F53316B45CD5D5538B9DC8164B271B75CEAE7089019EBF.F410CF0B2C389EDBF52F07149FE566D3DEDCE8DBB21B702D211E0FB898CB35A6648D701FADFD084EBEF76C1C9CD17925CCDB9737848CC31463D222A3B9BF7216
+  register: var_cis_1_5_1__2
+  when:
+    - ansible_os_family == "Suse"
+  tags:
+    - cis_1_5_1
+
+- name: cis 1.5.1-03 Ensure bootloader password is set (Suse)
+  ansible.builtin.shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+  when:
+    - ansible_os_family == "Suse"
+    - var_cis_1_5_1__1.changed or var_cis_1_5_1__2.changed
+  tags:
+    - cis_1_5_1 
+
+
+#4.2.3 Ensure permissions on all logfiles are configured
+- name: cis 4.2.3 Ensure permissions on all logfiles are configured (check) (Redhat)
+  ansible.builtin.script: /usr/bin/find /var/log -type f -perm /037 -ls -o -type d -perm /026 -ls
+  register: result_cis_4_2_3
+  changed_when: false
+  when:
+    - ansible_distribution == "RedHat"
+  tags:
+    - cis_4_2_3
+
+- name: cis 4.2.3 Ensure permissions on all logfiles are configured (remediate) (Redhat)
+  ansible.builtin.script: /usr/bin/find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
+  when: 
+    - ansible_distribution == "RedHat"
+    - result_cis_4_2_3.stdout != ""
+    - ansible_check_mode == false
+  tags:
+    - cis_4_2_3
+
+
+  #5.1.2 Ensure permissions on /etc/crontab are configured
+- name: cis 5.1.2 Ensure permissions on /etc/crontab are configured (Alle)
   file:
     path: "{{ item }}"
     owner: root
@@ -12,14 +181,13 @@
     mode: 0600
   with_items:
     - /etc/crontab
-    - /etc/ssh/ssh_host_rsa_key
-    - /etc/ssh/ssh_host_ecdsa_key
-    - /etc/ssh/ssh_host_ed25519_key
   ignore_errors: true
   when: 
     - config_req_07 | default(true)
     - ansible_check_mode == false
-  tags: test2
+  tags: 
+    - cis_5_1_2
+
 
 #5.1.3 Ensure permissions on /etc/cron.hourly are configured
 #5.1.4 Ensure permissions on /etc/cron.daily are configured
@@ -43,6 +211,13 @@
     - config_req_07 | default(true)
     - ansible_check_mode == false
     - ansible_distribution == "RedHat"
+  tags:
+    - cis_5_1_3
+    - cis_5_1_4
+    - cis_5_1_5
+    - cis_5_1_6
+    - cis_5_1_7
+
   
 #5.1.3 Ensure permissions on /etc/cron.hourly are configured
 #5.1.4 Ensure permissions on /etc/cron.daily are configured
@@ -65,140 +240,36 @@
   when: 
     - config_req_07 | default(true)
     - ansible_check_mode == false
-    - (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
-  tags: test2
-
-#1.5.3 Ensure authentication required for single user mode
-- name: cis 1.5.3 Ensure authentication required for single user mode (rescue) (Redhat)
-  lineinfile:
-    dest: /usr/lib/systemd/system/rescue.service
-    state: present
-    regexp: '^ExecStart=*'
-    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
-  when:
-    - ansible_check_mode == false
-    - (ansible_distribution == "RedHat" and ansible_distribution_major_version != "7" ) or (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
-  tags: test, test4
-
-- name: 1.5.3 Ensure authentication required for single user mode (emergency) (Redhat)
-  lineinfile:
-    dest: /usr/lib/systemd/system/emergency.service
-    state: present
-    regexp: '^ExecStart=*'
-    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
-  when:
-    - ansible_check_mode == false
-    - (ansible_distribution == "RedHat" and ansible_distribution_major_version != "7") or (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
-  tags: test, test4
+    - ansible_os_family == "Suse"
+  tags:
+    - cis_5_1_3
+    - cis_5_1_4
+    - cis_5_1_5
+    - cis_5_1_6
+    - cis_5_1_7
 
 
-#4.2.3 Ensure permissions on all logfiles are configured
-#find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
-- name: 4.2.3 Ensure permissions on all logfiles are configured (check) (Redhat)
-  ansible.builtin.script: /usr/bin/find /var/log -type f -perm /037 -ls -o -type d -perm /026 -ls
-  register: result_cis_4_2_3
-  changed_when: false
-  when:
-    - ansible_distribution == "RedHat"
-
-- name: cis 4.2.3 Ensure permissions on all logfiles are configured (remediate) (Redhat)
-  ansible.builtin.script: /usr/bin/find /var/log -type f -exec chmod g-wx,o-rwx "{}" + -o -type d -exec chmod g-w,o-rwx "{}" +
+#5.2.3 / 5.2.4 Ensure permissions on SSH private host key files are configured
+- name: cis 5.2.3 / 5.2.4 Ensure permissions on SSH private host keys
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - /etc/ssh/ssh_host_rsa_key
+    - /etc/ssh/ssh_host_ecdsa_key
+    - /etc/ssh/ssh_host_ed25519_key
+  ignore_errors: true
   when: 
-    - ansible_distribution == "RedHat"
-    - result_cis_4_2_3.stdout != ""
+    - config_req_07 | default(true)
     - ansible_check_mode == false
-  tags: test3
-
-
-#1.11 Ensure system-wide crypto policy is FUTURE or FIPS
-- name: 1.11 Ensure system-wide crypto policy is FUTURE or FIPS (check) (Redhat)
-  ansible.builtin.replace:
-    path: /etc/crypto-policies/config
-    regexp: '^DEFAULT'
-    replace: 'FUTURE'
-  when:
-    - ansible_check_mode == false
-    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
   tags: 
-    - cis.1.11
-
-#1.1.23 Disable USB Storage
-- name: 1.1.23 Disable USB Storage (check) (Redhat)
-  ansible.builtin.shell: /usr/sbin/modprobe -n -v usb-storage
-  register: result_cis_1_1_23
-  when:
-    - ansible_distribution == "RedHat"
-  tags:
-    - cis.1.1.23
-
-- name: 1.1.23 Disable USB Storage (configure) (Redhat)
-  lineinfile:
-    path: /etc/modprobe.d/usb-storage.conf
-    state: present
-    create: yes
-    regexp: 'install usb-storage /bin/true'
-    line: install usb-storage /bin/true
-  when:
-    - ansible_distribution == "RedHat"
-    - ansible_check_mode == false
-    - result_cis_1_1_23.stdout != "install usb-storage /bin/true" or esult_cis_1_1_23.stdout != "install /bin/true"
-  notify: remove usb-storage
-  tags:
-    - cis.1.1.23
-
-- name: cis 1.5.2 Ensure bootloader password is set (Redhat)
-  lineinfile:
-    path: /boot/grub2/user.cfg
-    state: present
-    create: yes
-    mode: '0600'
-    owner: root 
-    group: root
-    regexp: '^GRUB2_PASSWORD=' 
-    line: GRUB2_PASSWORD=grub.pbkdf2.sha512.10000.3C35F8C44F9A7543B64C7ED7CF4C77893465185E0D645B00F9904EA5973BCB46238A77737E1B6D752AECB1E34A41274DB12129CE8A7104DD2F81ABCAED862C2B.F737492F278B83B6C9288FA831F1C752DE20FDE998DDE2F3F99645AA8FED6A342F96E8552ABF63DAFF8135909D60DBEA53D7D6BD3EF12F6B3946DF502E8C713E
-  when:
-    - ansible_distribution == "RedHat"
-  tags: test
-
-- name: cis 1.5.1-1 Ensure bootloader password is set (SLES)
-  lineinfile:
-    path: /etc/grub.d/40_custom
-    state: absent
-    mode: '0755'
-    owner: root 
-    group: root
-    insertafter: EOF
-    regexp: '^set superusers="root"' 
-    line: set superusers="root"
-  register: action_cis_1_5_1__1
-  when:
-    - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
-  tags: test2
-
-- name: cis 1.5.1-2 Ensure bootloader password is set (SLES)
-  lineinfile:
-    path: /etc/grub.d/40_custom
-    state: absent
-    mode: '0755'
-    owner: root 
-    group: root
-    insertafter: EOF
-    regexp: '^password_pbkdf2 root' 
-    line: password_pbkdf2 root grub.pbkdf2.sha512.10000.7DE0DBB0D911174EBF0CE662FB21E0B38AE7A6DEFEF8FA536686CDE9199BA63E39DDC49D014FC85CF4F53316B45CD5D5538B9DC8164B271B75CEAE7089019EBF.F410CF0B2C389EDBF52F07149FE566D3DEDCE8DBB21B702D211E0FB898CB35A6648D701FADFD084EBEF76C1C9CD17925CCDB9737848CC31463D222A3B9BF7216
-  register: action_cis_1_5_1__2
-  when:
-    - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
-  tags: test2
-
-- name: cis 1.5.1-3 Ensure bootloader password is set (SLES)
-  ansible.builtin.shell: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
-  when:
-    - (ansible_distribution == "SLES" or ansible_distribution == "openSUSE Leap")
-    - action_cis_1_5_1__1.changed or action_cis_1_5_1__2.changed
-  tags: test2
+    - cis_5_2_3
+    - cis_5_2_4
 
 
-#1.5.3 Ensure authentication required for single user mode
+#5.3.3 Ensure password reuse is limited
 - name: cis 5.3.3 Ensure password reuse is limited (Suse)
   lineinfile:
     dest: /etc/pam.d/common-password
@@ -208,21 +279,10 @@
     line: password   required pam_pwhistory.so remember=5 
   when:
     - ansible_check_mode == false
-    - (ansible_distribution == "SLES") or (ansible_distribution == "openSUSE") or (ansible_distribution == "openSUSE Leap")
-  tags: test5
+    - ansible_os_family == "Suse"
+  tags:
+    - cis_5_3_3
 
-- name: cis 1.8.1.6 Ensure permissions on /etc/issue.net are configured (SLES 15)
-  file:
-    path: "{{ item }}"
-    owner: root
-    group: root
-    mode: 0644
-  with_items:
-    - /etc/issue.net
-  when: 
-    - ansible_check_mode == false
-    - ansible_distribution == "openSUSE Leap"
-  tags: test6
 
   #5.4.4 (rhel7) Ensure authentication required for single user mode
 - name: cis 5.4.4-1 Ensure password reuse is limited (RedHat 7)
