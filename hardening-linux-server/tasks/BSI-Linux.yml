@@ -342,3 +342,14 @@
     - ansible_check_mode == false
     - ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
   tags: cis_5_4_4
+
+- name: cis 5.5.1.2 Ensure minimum days between password chnages is configured (RedHat 7)
+  lineinfile:
+    dest: /etc/login.defs
+    state: present
+    regexp: '^\s*PASS_MIN_DAYS'
+    line: PASS_MIN_DAYS 1
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
+  tags: cis_5_4_4
