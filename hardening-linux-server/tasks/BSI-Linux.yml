@@ -176,10 +176,13 @@
 #4.2.1.3 Ensure rsyslog default file permissions configured (redhat 7)
 - name: cis 4.2.1.3 Ensure rsyslog default file permissions configured (redhat 7)
   lineinfile:
-    dest: /etc/rsyslog.d/listen.conf
+    dest: {{ item }}
     state: present
     regexp: '^$FileCreateMode'
     line: $FileCreateMode 0600
+  with_items:
+    - /etc/rsyslog.d/listen.conf
+    - /etc/rsyslog.conf
   when:
     - ansible_check_mode == false
     - ansible_distribution == "RedHat" and ansible_distribution_major_version == "7"
