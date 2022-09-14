@@ -176,7 +176,7 @@
 #4.2.1.3 Ensure rsyslog default file permissions configured (redhat 7)
 - name: cis 4.2.1.3 Ensure rsyslog default file permissions configured (redhat 7)
   lineinfile:
-    dest: /etc/rsyslog.conf/listen.conf
+    dest: /etc/rsyslog.d/listen.conf
     state: present
     regexp: '^$FileCreateMode'
     line: $FileCreateMode 0640
