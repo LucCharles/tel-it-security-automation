@@ -42,7 +42,22 @@
     - cis_1_1_24
 
 
-
+#cis 1.4.2 Ensure permissions on bootloader config are configured (redhat 7)
+- name: cis 1.4.2 Ensure permissions on bootloader config are configured (redhat 7)
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - /boot/grub2/grub.cfg
+  when: 
+    - config_req_07 | default(true)
+    - ansible_check_mode == false
+    - ansible_distribution == "RedHat"
+  tags:
+    - cis_1_4_2
 
 #cis 1.5.1 / 1.5.2 / 1.4.1 Ensure bootloader password is set
 - name: cis 1.5.2 / 1.4.1 Ensure bootloader password is set (Redhat)
