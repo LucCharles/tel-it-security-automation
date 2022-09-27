@@ -34,7 +34,7 @@
   when: 
     - config_pam | default(true)
     - not ansible_check_mode
-    - ansible_distribution != "RedHat"
+    - not (ansible_distribution == "RedHat" and ansible_distribution_major_version == 8)
 
 - name: req-42-45.2 register variable for config files for PAM config tools
   stat:
@@ -43,7 +43,7 @@
   when: 
     - config_pam | default(true)
     - not ansible_check_mode
-    - ansible_distribution != "RedHat"
+    - not (ansible_distribution == "RedHat" and ansible_distribution_major_version == 8)
     - item.1.stat.exists 
     - item.1.stat.islnk
   with_together:
@@ -59,7 +59,7 @@
   when: 
     - config_pam | default(true) 
     - not ansible_check_mode
-    - ansible_distribution != "RedHat"
+    - not (ansible_distribution == "RedHat" and ansible_distribution_major_version == 8)
     - item.1.stat.exists
     - item.1.stat.islnk
   with_together: 
