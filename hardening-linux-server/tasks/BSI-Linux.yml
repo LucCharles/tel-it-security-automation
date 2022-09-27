@@ -69,7 +69,7 @@
     - redhat_7
 
 # ---------------------------------
-# Ensure bootloader password is set
+# Ensure bootloader password is set 
 # ---------------------------------
 
 - name: cis 1.5.2 / 1.4.1 Ensure bootloader password is set (Redhat)
