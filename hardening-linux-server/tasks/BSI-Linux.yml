@@ -90,7 +90,6 @@
     - redhat_7
     - redhat_8
 
-
 - name: cis 1.5.1-01 Ensure bootloader password is set (Suse)
   lineinfile:
     path: /etc/grub.d/40_custom
@@ -107,7 +106,6 @@
   tags:
     - cis_1_5_1
     - suse
-
 
 - name: cis 1.5.1-02 Ensure bootloader password is set (Suse)
   lineinfile:
@@ -135,8 +133,10 @@
     - cis_1_5_1
     - suse
 
+# ---------------------------------------------------
+# Ensure authentication required for single user mode
+# ---------------------------------------------------
 
-#1.5.3 Ensure authentication required for single user mode
 - name: cis 1.5.3-01 Ensure authentication required for single user mode (rescue) (Redhat 8)
   lineinfile:
     dest: /usr/lib/systemd/system/rescue.service
@@ -150,7 +150,6 @@
     - cis_1_5_3
     - redhat_8
 
-
 - name: cis 1.5.3-20 Ensure authentication required for single user mode (emergency) (Redhat 8)
   lineinfile:
     dest: /usr/lib/systemd/system/emergency.service
@@ -163,7 +162,6 @@
   tags:
     - cis_1_5_3
     - redhat_8
-
 
 - name: cis 1.8.1.6 Ensure permissions on /etc/issue.net are configured (OpenSUSE 15)
   file:
@@ -179,8 +177,10 @@
   tags:
     - cis_1_8_1_6
 
+# --------------------------------------------------
+# Ensure system-wide crypto policy is FUTURE or FIPS
+# --------------------------------------------------
 
-#1.11 Ensure system-wide crypto policy is FUTURE or FIPS
 - name: cis 1.11 / 1.15 Ensure system-wide crypto policy is FUTURE or FIPS (check) (Redhat)
   ansible.builtin.replace:
     path: /etc/crypto-policies/config
@@ -194,7 +194,10 @@
     - cis_1_15
     - redhat_8
 
-#4.2.1.3 Ensure rsyslog default file permissions configured (redhat 7)
+# -------------------------------------------------------------
+# Ensure rsyslog default file permissions configured (redhat 7)
+# -------------------------------------------------------------
+
 - name: cis 4.2.1.3 Ensure rsyslog default file permissions configured (redhat 7)
   lineinfile:
     dest: "{{ item }}"
@@ -211,7 +214,10 @@
     - cis_4_2_1_3
     - redhat_7
 
-#4.2.3 Ensure permissions on all logfiles are configured
+# -------------------------------------------------
+# Ensure permissions on all logfiles are configured
+# -------------------------------------------------
+
 - name: cis 4.2.3 Ensure permissions on all logfiles are configured (check) (Redhat)
   ansible.builtin.script: /usr/bin/find /var/log -type f -perm /037 -ls -o -type d -perm /026 -ls
   register: result_cis_4_2_3
@@ -234,8 +240,10 @@
     - redhat_8
     - redhat_7
 
+# -------------------------------------------------
+# Ensure permissions on /etc/crontab are configured
+# -------------------------------------------------
 
-  #5.1.2 Ensure permissions on /etc/crontab are configured
 - name: cis 5.1.2 Ensure permissions on /etc/crontab are configured (Alle)
   file:
     path: "{{ item }}"
@@ -250,13 +258,19 @@
     - ansible_check_mode == false
   tags: 
     - cis_5_1_2
+    - redhat_7
+    - redhat_8
+    - suse 
+    - openSUSE 
 
+# ------------------------------------------------------
+# Ensure permissions on /etc/cron.hourly are configured
+# Ensure permissions on /etc/cron.daily are configured
+# Ensure permissions on /etc/cron.weekly are configured
+# Ensure permissions on /etc/cron.monthly are configured
+# Ensure permissions on /etc/cron.d are configured
+# ------------------------------------------------------
 
-#5.1.3 Ensure permissions on /etc/cron.hourly are configured
-#5.1.4 Ensure permissions on /etc/cron.daily are configured
-#5.1.5 Ensure permissions on /etc/cron.weekly are configured
-#5.1.6 Ensure permissions on /etc/cron.monthly are configured
-#5.1.7 Ensure permissions on /etc/cron.d are configured
 - name: cis 5.1.3-5.1.6 Ensure permissions on /etc/cron.{hourly, daily, wekkly, monthly, d} are configured (Redhat)
   file:
     path: "{{ item }}"
@@ -283,12 +297,14 @@
     - redhat_7
     - redhat_8 
     
-  
-#5.1.3 Ensure permissions on /etc/cron.hourly are configured
-#5.1.4 Ensure permissions on /etc/cron.daily are configured
-#5.1.5 Ensure permissions on /etc/cron.weekly are configured
-#5.1.6 Ensure permissions on /etc/cron.monthly are configured
-#5.1.7 Ensure permissions on /etc/cron.d are configured
+# -------------------------------------------------------
+# Ensure permissions on /etc/cron.hourly are configured
+# Ensure permissions on /etc/cron.daily are configured
+# Ensure permissions on /etc/cron.weekly are configured
+# Ensure permissions on /etc/cron.monthly are configured
+# Ensure permissions on /etc/cron.d are configured
+# -------------------------------------------------------
+
 - name: cis 5.1.3-5.1.6 Ensure permissions on /etc/cron.{hourly, daily, wekkly, monthly, d} are configured (SLES)
   file:
     path: "{{ item }}"
@@ -315,8 +331,10 @@
     - suse
     - openSUSE
 
+# ---------------------------------------------------------------
+# Ensure permissions on SSH private host key files are configured
+# ---------------------------------------------------------------
 
-#5.2.3 / 5.2.4 Ensure permissions on SSH private host key files are configured
 - name: cis 5.2.3 / 5.2.4 Ensure permissions on SSH private host keys
   file:
     path: "{{ item }}"
@@ -335,8 +353,10 @@
     - cis_5_2_3
     - cis_5_2_4
 
+# --------------------------------
+# Ensure password reuse is limited
+# --------------------------------
 
-#5.3.3 Ensure password reuse is limited
 - name: cis 5.3.3 Ensure password reuse is limited (Suse)
   lineinfile:
     dest: /etc/pam.d/common-password
