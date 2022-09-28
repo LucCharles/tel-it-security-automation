@@ -75,4 +75,4 @@
 
 - name: remove usb-storage
   ansible.builtin.script: /usr/sbin/rmmod usb-storage
-  ignore_errors: yes
+  ignore_errors: true
