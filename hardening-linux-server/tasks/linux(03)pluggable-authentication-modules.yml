@@ -116,7 +116,8 @@
     - system-auth
   when:
     - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
-  tags: req42
+  tags: r
+    - eq42
 
 - name: CIS 5.4.3 part 1 (Redhat 8) custom authselect
   lineinfile:
@@ -129,7 +130,8 @@
     - password-auth
   when:
     - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
-  tags: req42
+  tags: 
+    - req42
 
 
 - name: CIS 5.4.3 part 2 (Redhat 8) custom authselect
@@ -142,7 +144,9 @@
     - system-auth
   when:
     - ansible_distribution == "RedHat" and ansible_distribution_major_version == "8"
-  tags: req42
+  tags: 
+    - req42
+  notify: authselect 
 
 # Req-42: If PAM is used, it needs to be reconfigured to use strong salted
 #         password hash functions while doing many calculation rounds to protect

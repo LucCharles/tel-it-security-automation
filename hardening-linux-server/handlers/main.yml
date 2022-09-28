@@ -76,3 +76,7 @@
 - name: remove usb-storage
   ansible.builtin.script: /usr/sbin/rmmod usb-storage
   ignore_errors: true
+
+- name: authselect
+  ansible.builtin.script: authselect select custom/devsecops-profile with-faillock
+  ignore_errors: true
