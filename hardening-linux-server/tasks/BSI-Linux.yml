@@ -150,7 +150,7 @@
     - cis_1_5_3
     - redhat_8
 
-- name: cis 1.5.3-20 Ensure authentication required for single user mode (emergency) (Redhat 8)
+- name: cis 1.5.3-02 Ensure authentication required for single user mode (emergency) (Redhat 8)
   lineinfile:
     dest: /usr/lib/systemd/system/emergency.service
     state: present
@@ -162,6 +162,32 @@
   tags:
     - cis_1_5_3
     - redhat_8
+  
+- name: cis 1.5.3-01 Ensure authentication required for single user mode (rescue) (SLES 15)
+  lineinfile:
+    dest: /usr/lib/systemd/system/rescue.service
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue'
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "SLES" and ansible_distribution_major_version == "15"
+  tags:
+    - cis_1_5_3
+    - sles_15
+
+- name: cis 1.5.3-02 Ensure authentication required for single user mode (emergency) (SLES 15)
+  lineinfile:
+    dest: /usr/lib/systemd/system/emergency.service
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency'
+  when:
+    - ansible_check_mode == false
+    - ansible_distribution == "SLES" and ansible_distribution_major_version == "15"
+  tags:
+    - cis_1_5_3
+    - sles_15
 
 - name: cis 1.8.1.6 Ensure permissions on /etc/issue.net are configured (OpenSUSE 15)
   file:
