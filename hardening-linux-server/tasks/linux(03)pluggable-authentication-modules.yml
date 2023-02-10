@@ -204,6 +204,15 @@
     - config_req_43 | default(true)
     - ansible_os_family == "Suse"
 
+- name: req-043.4 set password expiration to one year in login.defs
+  lineinfile:
+    dest: '/etc/login.defs'
+    state: present
+    regexp: '^PASS_MAX_DAYS '
+    line: 'PASS_MAX_DAYS 365'
+  when: config_req_43 | default(true)
+
+
 - name: req-043.4 configure appropriate password complexity for PAM (Ubuntu)
   pamd:
     name: "{{ item }}"
