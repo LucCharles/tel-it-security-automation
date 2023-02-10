@@ -239,7 +239,7 @@ log_rotate_compress: true
 # More variables for this requirement in file /default/main.yml!
 # Enables (true) the system to act as a NTP timeserver.
 set_timezone: "{{ timezone | default('Europe/Berlin') }}"
-set_timesync_servers: "{{ timesync_servers | default(['169.254.169.123','ntp01.otc-service.com','ntp02.otc-service.com']) | list }}"
+set_timesync_servers: "{{ timesync_servers | default(['s2vg500nt01.pzd-svn.de','s2vg500nt02.pzd-svn.de']) | list }}"
 timesync_server_enable: false
 
 # Req-31: Auditd service must be used to log security relevant events.
