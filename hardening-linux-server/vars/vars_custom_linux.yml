@@ -44,7 +44,7 @@ config_req_03: true
 
 # Req-4: Dedicated partitions must be used for growing content that can 
 #        influence the availability of the system.
-config_req_04: true
+config_req_04: false
 # Enable (true) to create partition for /var and /tmp automatically.
 
 # - NOTE ------------------------------------------------------------------
@@ -55,13 +55,13 @@ config_req_04: true
 
 # Req-5: Parameters nodev:  nosuid and noexec must be set for partitions 
 #        where this is applicable.
-config_req_05: true
+config_req_05: false
 
 # Req-6: Automounting must be disabled.
 config_req_06: true
 
 # Req-7: The use of at/cron must be restricted to authorized users.
-config_req_07: true
+config_req_07: false
 
 # Req-8: Sticky bit must be set on all world-writable directories.
 config_req_08: true
@@ -241,19 +241,19 @@ config_req_45: true
 
 # Req-46: If iptables is used, policies for loopback traffic must be 
 #         configured.
-config_req_46: true
+config_req_46: false
 
 # Req-47: If iptables is used, policies for outbound and established 
 #         connections must be configured.
-config_req_47: true
+config_req_47: false
 
 # Req-48: If iptables is used, policies must exist for all ports in 
 #         listening state.
-config_req_48: true
+config_req_48: false
 
 # Req-49: If iptables is used, the default policy for tables INPUT and FORWARD
 #         must be configured to drop all traffic.
-config_req_49: true
+config_req_49: false
 
 # Req-50: If a system has Internet facing services or is a virtualization
 #         host, a MAC solution must be used to restrict these services
