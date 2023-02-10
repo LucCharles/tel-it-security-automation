@@ -108,7 +108,7 @@ config_req_19: true
 #            the execution will fail!
 # -------------------------------------------------------------------------
 allowed_users: 
-  - "devsecops"
+  - "ansible"
   # - ""    # Add more users if needed
 
 # Req-20: System accounts must be non-login.
