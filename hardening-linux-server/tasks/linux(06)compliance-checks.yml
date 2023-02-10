@@ -250,12 +250,20 @@
   check_mode: no
   when: config_req_65 | default(true)
 
-- name: req-065.2 set user for unowned files to root
-  file:
-    path: "{{ item }}"
-    owner: "root"
-    group: "root"
-  with_items: "{{ find_unowned.stdout_lines | default([]) }}"
+
+#- name: req-065.2 set user for unowned files to root
+#  file:
+#    path: "{{ item }}"
+#    owner: "root"
+#    group: "root"
+#  with_items: "{{ find_unowned.stdout_lines | default([]) }}"
+#  when: 
+#    - config_req_65 | default(true)
+#    - find_unowned.stdout != ""
+
+- name: req-065.2 report unowned files instead of silent re-owning to root
+  fail:
+    msg: "Following files are unowned. Please re-assign or delete theM {{ find_unowned.stdout_lines }}"
   when: 
     - config_req_65 | default(true)
     - find_unowned.stdout != ""
