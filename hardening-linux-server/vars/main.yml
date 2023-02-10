@@ -233,7 +233,7 @@ system_users_whitelist:
 log_rotate_time: "weekly"
 log_rotate_count: 4
 log_rotate_maxsize: "10M"
-log_rotate_compress: false
+log_rotate_compress: true
 
 # Req-30: System time must be synchronized against a reference time source.
 # More variables for this requirement in file /default/main.yml!

@@ -653,7 +653,21 @@
     - not ansible_check_mode
     - check_root_pw.stdout != ""
 
-- name: req-024.4 set single user mode
+- name: req-024.4 set single user mode (SLES)
+  lineinfile:
+    dest: '{{ item }}'
+    state: present
+    regexp: '^ExecStart=*'
+    line: 'ExecStart=-/bin/sh -c "/usr/sbin/sulogin; echo 'Starting default target'; /usr/bin/systemctl --job-mode=fail --no-block default"'
+  with_items:
+    - "/usr/lib/systemd/system/rescue.service"
+    - "/usr/lib/systemd/system/emergency.service"
+  when:
+    - config_req_24 | default(true)
+    - not os_config_root_password
+    - ansible_distribution == "SLES"
+
+- name: req-024.5 set single user mode (not SLES)
   lineinfile:
     dest: '{{ item }}'
     state: present
@@ -665,8 +679,7 @@
   when:
     - config_req_24 | default(true)
     - not os_config_root_password
-
-
+    - ansible_distribution != "SLES"
 
 
 # | Req-25: The management of the operating system must be done via a dedicated 
