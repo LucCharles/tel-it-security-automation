@@ -113,7 +113,9 @@
   register: second_partition
   ignore_errors: true
   changed_when: false
-  when: config_req_04 | default(true)
+  when: 
+    - config_req_04 | default(true)
+    - root_partition is succeeded
 
 - name: req-004.4 check if a usable disk is available
   block:
@@ -658,7 +660,7 @@
     dest: '{{ item }}'
     state: present
     regexp: '^ExecStart=*'
-    line: 'ExecStart=-/bin/sh -c "/usr/sbin/sulogin; echo 'Starting default target'; /usr/bin/systemctl --job-mode=fail --no-block default"'
+    line: 'ExecStart=-/bin/sh -c "/usr/sbin/sulogin; echo ''Starting default target''; /usr/bin/systemctl --job-mode=fail --no-block default"'
   with_items:
     - "/usr/lib/systemd/system/rescue.service"
     - "/usr/lib/systemd/system/emergency.service"
